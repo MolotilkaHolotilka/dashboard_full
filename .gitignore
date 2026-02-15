@@ -1,0 +1,73 @@
+# IDE and OS files
+.idea/
+.vscode/
+*.iml
+.DS_Store
+
+# Build outputs
+backend/target/
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/coverage/
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+*.orig
+*.swp
+*.swo
+.cache/
+.tmp/
+tmp/
+
+# Office lock files
+~$*.doc
+~$*.docx
+~$*.xlsx
+~$*.pptx
+.~lock.*
+
+# Local secrets
+.env
+.env.*
+!.env.example
+*.local
+
+# Render / tmp / generated scratch
+_render*/
+.render*/
+.render_test/
+_word_tmp/
+generated/.tmp/
+tmp_*
+docs/generated/
+docs/_generated/
+docs/_analysis/
+docs/_render*/
+docs/final_locked/
+
+# Local documentation drafts and report materials
+docs/
+tools/
+
+# Legacy local report artifacts
+/report_render*/
+/report_assets/
+/screens/
+/docx_render_check/
+/*.pdf
+/*.docx
+/*.pptx
+/*.xlsx
+/report1.txt
+/task_tz.txt
+*.docx
+*.pptx
+*.pdf
+
+# Editor / cache leftovers
+__pycache__/
+*.py[cod]
+*.tsbuildinfo
