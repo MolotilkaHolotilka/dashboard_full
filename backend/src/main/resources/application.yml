@@ -1,0 +1,89 @@
+# Настройки приложения (Неделя 4). URL/логин/пароль БД можно переопределить переменными окружения (для Docker)(но не нужно).
+server:
+  port: 8080
+
+spring:
+  application:
+    name: dashboard-battle-backend
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/dashboard_battle}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    open-in-view: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
+
+jwt:
+  secret: ${JWT_SECRET:change-me-in-production-at-least-32-chars!!}
+  expiration-ms: 86400000
+
+integration:
+  allow-debug-headers: ${ALLOW_DEBUG_HEADERS:false}
+  moysklad:
+    real-enabled: ${MOYSKLAD_REAL_ENABLED:false}
+    base-url: ${MOYSKLAD_BASE_URL:https://api.moysklad.ru/api/remap/1.2}
+    token-override: ${MOYSKLAD_TOKEN:}
+  telegram:
+    real-enabled: ${TELEGRAM_REAL_ENABLED:false}
+    bot-token-override: ${TELEGRAM_BOT_TOKEN:}
+    chat-id-override: ${TELEGRAM_CHAT_ID:}
+
+---
+# Профиль для запуска без PostgreSQL (только проверка старта приложения)
+spring:
+  config:
+    activate:
+      on-profile: no-db
+  liquibase:
+    enabled: false
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data-no-db.sql
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+  h2:
+    console:
+      enabled: true
+
+---
+# Профиль для запуска через docker: PostgreSQL + автозаполнение демо-данными
+spring:
+  config:
+    activate:
+      on-profile: demo-postgres
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data-demo-postgres.sql
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
